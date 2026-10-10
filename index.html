@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeracaOS — Laboratorium Akuntansi</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-icon">N</span>
+        <div><b>NeracaOS</b><small>LAB AKUNTANSI</small></div>
+      </div>
+      <div class="workspace">🏢 Karya Digital <small>Perusahaan simulasi</small></div>
+      <p class="nav-label">MENU UTAMA</p>
+      <nav>
+        <button class="nav active" data-page="dashboard">▦ Dashboard</button>
+        <button class="nav" data-page="transactions">⇄ Transaksi</button>
+        <button class="nav" data-page="journal">▤ Jurnal umum</button>
+        <button class="nav" data-page="accounts">▣ Daftar akun</button>
+        <button class="nav" data-page="ledger">☷ Buku besar</button>
+        <button class="nav" data-page="reports">▥ Laporan keuangan</button>
+        <button class="nav" data-page="rules">⌘ Rule engine</button>
+        <button class="nav" data-page="learning">✦ Ruang belajar</button>
+      </nav>
+      <div class="sidebar-note">
+        <b>Mode pembelajaran</b>
+        <p>Gunakan data simulasi untuk memahami proses akuntansi.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><span class="muted">Workspace / </span><b id="pageTitle">Dashboard</b></div>
+        <span class="chip">● DATA SIMULASI</span>
+      </header>
+
+      <section class="page active" id="dashboard">
+        <div class="heading">
+          <div><span class="eyebrow">LABORATORIUM AKUNTANSI</span>
+            <h1>Dashboard keuangan</h1>
+            <p class="muted">Pantau kondisi keuangan perusahaan simulasi kamu.</p>
+          </div>
+          <button class="primary" data-goto="transactions">+ Transaksi baru</button>
+        </div>
+        <div class="notice">ⓘ Data contoh untuk pembelajaran, bukan laporan keuangan resmi.</div>
+        <div class="stats">
+          <article class="stat"><span>Total aset</span><h2 id="assets">Rp 0</h2><small>Saldo aset</small></article>
+          <article class="stat"><span>Pendapatan</span><h2 id="revenue">Rp 0</h2><small>Periode berjalan</small></article>
+          <article class="stat"><span>Total beban</span><h2 id="expenses">Rp 0</h2><small>Periode berjalan</small></article>
+          <article class="stat"><span>Laba bersih</span><h2 id="profit">Rp 0</h2><small>Pendapatan dikurangi beban</small></article>
+        </div>
+        <div class="columns">
+          <article class="panel">
+            <h3>Persamaan akuntansi</h3>
+            <p class="muted">Aset = Liabilitas + Ekuitas</p>
+            <div class="equation"><div><small>Aset</small><b id="eqAssets">Rp 0</b></div>
+              <span>=</span><div><small>Liabilitas + Ekuitas</small><b id="eqLE">Rp 0</b></div>
+            </div>
+            <p id="balanceStatus" class="success">● Memeriksa keseimbangan</p>
+          </article>
+          <article class="panel">
+            <h3>Ringkasan jurnal</h3>
+            <div class="summary-row"><span>Total transaksi</span><b id="txTotal">0</b></div>
+            <div class="summary-row"><span>Total debit</span><b id="debitTotal">Rp 0</b></div>
+            <div class="summary-row"><span>Total kredit</span><b id="creditTotal">Rp 0</b></div>
+            <button class="secondary full" data-goto="journal">Lihat jurnal →</button>
+          </article>
+        </div>
+        <article class="panel">
+          <div class="panel-heading"><h3>Transaksi terbaru</h3>
+            <button class="text-button" data-goto="transactions">Lihat semua →</button>
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Tanggal</th><th>Deskripsi</th><th>Kategori</th><th>Nilai</th></tr></thead>
+            <tbody id="recentRows"></tbody>
+          </table></div>
+        </article>
+      </section>
+
+      <section class="page" id="transactions">
+        <div class="heading"><div><h1>Transaksi</h1>
+          <p class="muted">Catat transaksi dan buat jurnal otomatis.</p></div></div>
+        <article class="panel">
+          <h3>Tambah transaksi</h3>
+          <form id="transactionForm" class="form-grid">
+            <label>Jenis transaksi
+              <select id="txType" required>
+                <option value="cash_sale">Penjualan tunai</option>
+                <option value="credit_sale">Penjualan kredit</option>
+                <option value="expense">Pembayaran beban</option>
+                <option value="buy_equipment">Pembelian peralatan tunai</option>
+                <option value="payable_payment">Pembayaran utang usaha</option>
+                <option value="owner_investment">Setoran modal</option>
+              </select>
+            </label>
+            <label>Tanggal<input id="txDate" type="date" required></label>
+            <label class="wide">Deskripsi<input id="txDescription" maxlength="120"
+              placeholder="Contoh: Jasa desain untuk klien" required></label>
+            <label>Jumlah (Rupiah)<input id="txAmount" type="number"
+              min="1" step="1" placeholder="1000000" required></label>
+            <label>Referensi (opsional)<input id="txReference" placeholder="INV-001"></label>
+            <div class="wide"><button class="primary" type="submit">Validasi & posting jurnal</button></div>
+          </form>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><h3>Daftar transaksi</h3>
+            <input id="txSearch" placeholder="Cari transaksi..."></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Tanggal</th><th>Deskripsi</th><th>Kategori</th><th>Referensi</th><th>Jumlah</th></tr></thead>
+            <tbody id="transactionsRows"></tbody>
+          </table></div>
+        </article>
+      </section>
+
+      <section class="page" id="journal">
+        <div class="heading"><div><h1>Jurnal umum</h1>
+          <p class="muted">Setiap transaksi harus memiliki total debit dan kredit yang sama.</p></div>
+          <button class="secondary" id="exportCsv">Ekspor CSV</button></div>
+        <article class="panel"><div class="table-wrap"><table>
+          <thead><tr><th>Tanggal</th><th>No. jurnal</th><th>Akun</th><th>Deskripsi</th><th>Debit</th><th>Kredit</th></tr></thead>
+          <tbody id="journalRows"></tbody>
+        </table></div></article>
+      </section>
+
+      <section class="page" id="accounts">
+        <div class="heading"><div><h1>Daftar akun</h1>
+          <p class="muted">Chart of Accounts (COA).</p></div></div>
+        <article class="panel"><div class="table-wrap"><table>
+          <thead><tr><th>Kode</th><th>Nama akun</th><th>Kelompok</th><th>Saldo normal</th><th>Saldo</th></tr></thead>
+          <tbody id="accountRows"></tbody>
+        </table></div></article>
+      </section>
+
+      <section class="page" id="ledger">
+        <div class="heading"><div><h1>Buku besar</h1>
+          <p class="muted">Mutasi akun berdasarkan jurnal yang diposting.</p></div></div>
+        <article class="panel">
+          <label>Pilih akun <select id="ledgerAccount"></select></label>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Tanggal</th><th>Deskripsi</th><th>Debit</th><th>Kredit</th><th>Saldo</th></tr></thead>
+            <tbody id="ledgerRows"></tbody>
+          </table></div>
+        </article>
+      </section>
+
+      <section class="page" id="reports">
+        <div class="heading"><div><h1>Laporan keuangan</h1>
+          <p class="muted">Ringkasan dari jurnal yang telah diposting.</p></div>
+          <button class="secondary" id="reportExport">Ekspor laporan</button></div>
+        <div class="tabs">
+          <button class="tab active" data-report="income">Laba rugi</button>
+          <button class="tab" data-report="balance">Posisi keuangan</button>
+          <button class="tab" data-report="trial">Neraca saldo</button>
+        </div>
+        <article class="panel">
+          <h2 id="reportHeading">Laporan laba rugi</h2>
+          <p class="muted">Karya Digital • Rupiah</p>
+          <div id="reportContent"></div>
+        </article>
+      </section>
+
+      <section class="page" id="rules">
+        <div class="heading"><div><h1>Rule engine</h1>
+          <p class="muted">Contoh aturan yang mengubah transaksi menjadi jurnal.</p></div></div>
+        <article class="panel">
+          <h3>Uji aturan akuntansi</h3>
+          <form id="ruleTestForm" class="form-grid">
+            <label>Jenis transaksi<select id="testType">
+              <option value="cash_sale">Penjualan tunai</option>
+              <option value="credit_sale">Penjualan kredit</option>
+              <option value="expense">Pembayaran beban</option>
+              <option value="buy_equipment">Pembelian peralatan tunai</option>
+              <option value="payable_payment">Pembayaran utang usaha</option>
+              <option value="owner_investment">Setoran modal</option>
+            </select></label>
+            <label>Jumlah (Rupiah)<input id="testAmount" type="number" min="1" value="1250000" required></label>
+            <div class="wide"><button class="primary" type="submit">Jalankan simulasi</button></div>
+          </form>
+          <div id="ruleTestResult" class="result">Hasil simulasi akan muncul di sini.</div>
+        </article>
+        <article class="panel"><h3>Aturan yang digunakan</h3>
+          <ul class="rule-list">
+            <li>Penjualan tunai: Debit Kas, Kredit Pendapatan.</li>
+            <li>Penjualan kredit: Debit Piutang, Kredit Pendapatan.</li>
+            <li>Pembayaran beban: Debit Beban, Kredit Kas.</li>
+            <li>Pembelian peralatan: Debit Peralatan, Kredit Kas.</li>
+            <li>Pembayaran utang: Debit Utang Usaha, Kredit Kas.</li>
+            <li>Setoran modal: Debit Kas, Kredit Modal.</li>
+          </ul>
+          <p class="muted">Aturan ini adalah contoh pembelajaran, bukan interpretasi otomatis SAK atau perhitungan pajak.</p>
+        </article>
+      </section>
+
+      <section class="page" id="learning">
+        <div class="heading"><div><h1>Ruang belajar</h1>
+          <p class="muted">Pahami konsep dasar akuntansi.</p></div></div>
+        <div class="columns">
+          <article class="panel"><h3>1. Persamaan akuntansi</h3>
+            <p>Aset = Liabilitas + Ekuitas. Persamaan ini harus tetap seimbang setelah transaksi dicatat.</p></article>
+          <article class="panel"><h3>2. Debit dan kredit</h3>
+            <p>Aset dan beban umumnya bertambah di debit. Liabilitas, ekuitas, dan pendapatan umumnya bertambah di kredit.</p></article>
+          <article class="panel"><h3>3. Siklus akuntansi</h3>
+            <p>Transaksi → Jurnal → Buku besar → Neraca saldo → Laporan keuangan.</p></article>
+          <article class="panel"><h3>4. Standar dan pajak</h3>
+            <p>Penerapan SAK dan aturan pajak bergantung pada jenis entitas, periode, dan ketentuan yang berlaku. Verifikasi dengan sumber resmi dan tenaga ahli.</p></article>
+        </div>
+      </section>
+
+      <footer>© 2026 NeracaOS · Prototipe pembelajaran akuntansi</footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
